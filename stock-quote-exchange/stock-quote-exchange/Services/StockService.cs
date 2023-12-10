@@ -12,12 +12,13 @@ namespace stock_quote_exchange.Services
     public class StockService : IStockService
     {
         private IStockGateway _gateway;
-        //private ILogger _logger;
+        private ILogger<StockService> _logger;
 
-        public StockService(IStockGateway gateway) 
+        public StockService(IStockGateway gateway,
+                            ILogger<StockService> logger) 
         {
             _gateway = gateway;
-            //_logger = logger;
+            _logger = logger;
         }
         public async Task<StockResponse> GetStockAsync(string symbol)
         {

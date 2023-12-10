@@ -1,4 +1,5 @@
-﻿using stock_quote_exchange.Constants;
+﻿using Microsoft.Extensions.Logging;
+using stock_quote_exchange.Constants;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,11 +13,15 @@ namespace stock_quote_exchange.Services
     {
         private IStockService _stockService;
         private IEmailService _emailService;
+        private ILogger<StockMonitorService> _logger;
 
-        public StockMonitorService(IStockService stockService, IEmailService emailService)
+        public StockMonitorService(IStockService stockService,
+                                   IEmailService emailService,
+                                   ILogger<StockMonitorService> logger)
         {
             _stockService = stockService;
             _emailService = emailService;
+            _logger = logger;
         }
 
         public async Task MonitorStockAsync(string symbol, double buyThreshold, double sellThreshold)
@@ -33,10 +38,12 @@ namespace stock_quote_exchange.Services
 
             if (double.Parse(stock.Price, CultureInfo.InvariantCulture) >= sellThreshold)
             {
+                _logger.LogInformation($"Alerting sell operation for {symbol}");
                 _ =_emailService.SendEmailAsync(symbol, stock.Price, sellThreshold, ThresholdType.Sell);
             }
             else if (double.Parse(stock.Price, CultureInfo.InvariantCulture) <= buyThreshold)
             {
+                _logger.LogInformation($"Alerting buy operation for {symbol}");
                 _ = _emailService.SendEmailAsync(symbol, stock.Price, buyThreshold, ThresholdType.Buy);
             }
         }

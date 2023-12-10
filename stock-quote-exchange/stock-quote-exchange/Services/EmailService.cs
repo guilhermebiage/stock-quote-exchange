@@ -10,20 +10,26 @@ using System.Threading.Tasks;
 using MailKit.Security;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace stock_quote_exchange.Services
 {
     public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
+        private ILogger<EmailService> _logger;
 
-        public EmailService(IOptions<EmailSettings> emailSettings)
+        public EmailService(IOptions<EmailSettings> emailSettings,
+                            ILogger<EmailService> logger)
         {
             _emailSettings = emailSettings.Value;
+            _logger = logger;
         }
 
         public async Task SendEmailAsync(string symbol, string price, double threshold, ThresholdType thresholdType)
         {
+            _logger.LogInformation($"Sending email for {symbol}");
+
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_emailSettings.SenderConfiguration.SenderName
                                                 , _emailSettings.SenderConfiguration.SenderEmail));
