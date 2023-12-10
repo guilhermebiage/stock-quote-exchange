@@ -5,6 +5,7 @@ using Newtonsoft.Json.Serialization;
 using Refit;
 using stock_quote_exchange.Configuration;
 using stock_quote_exchange.Gateways;
+using stock_quote_exchange.Jobs;
 using stock_quote_exchange.Services;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,16 @@ namespace stock_quote_exchange.Extensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            return services.AddTransient<IStockService, StockService>();
+            _ = services.AddTransient<IStockService, StockService>()
+                        .AddTransient<IEmailService, EmailService>()
+                        .AddTransient<IStockMonitorService, StockMonitorService>();
+
+            _ = services.AddHostedService<StockQuoteJob>();
+
+            return services;
         }
 
-        public static IServiceCollection AddRefit(this IServiceCollection services, GatewayUrlSettings gatewayUrlSettings)
+        public static IServiceCollection AddGateways(this IServiceCollection services, GatewayUrlSettings gatewayUrlSettings)
         {
             //services.AddMemoryCache();
 
@@ -35,6 +42,11 @@ namespace stock_quote_exchange.Extensions
                 .ConfigureHttpClient(c => c.BaseAddress = gatewayUrlSettings.StockApiUrl);
 
             return services;
+        }
+
+        public static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         }
     }
 }

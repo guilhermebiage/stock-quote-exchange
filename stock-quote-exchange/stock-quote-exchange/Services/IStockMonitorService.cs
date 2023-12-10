@@ -1,5 +1,4 @@
-﻿using stock_quote_exchange.Dto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace stock_quote_exchange.Services
 {
-    public interface IStockService
+    public interface IStockMonitorService
     {
-        public Task<StockResponse> GetStockAsync(string Code);
+        public Task MonitorStockAsync(string symbol, double buyThreshold, double sellThreshold);
     }
 }

@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace stock_quote_exchange.Dto
 {
-    public sealed class StockDto
+    public sealed class StockResponse
     {
-        [JsonProperty("01. symbol")]
-        public string Symbol { get; set; }
-
-        [JsonProperty("05. price")]
-        public string Price { get; set; }
+        [JsonProperty("Global Quote")]
+        public StockDto Stock { get; set; }
     }
 }

@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "stock-quote-exchange": {
+      "commandName": "Project"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "stock-quote-exchange-CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "PETR4.SA 32 33"
+    }
+  }
+}

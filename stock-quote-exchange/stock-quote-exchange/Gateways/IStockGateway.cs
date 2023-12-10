@@ -10,7 +10,7 @@ namespace stock_quote_exchange.Gateways
 {
     public interface IStockGateway
     {
-        [Get("/api/stock(code)")]
-        StockDto GetStockInformation(string code);
+        [Get("/query?function=GLOBAL_QUOTE&apikey=I5T2JULT5IDCN5XN&symbol={symbol}")]
+        Task<StockResponse> GetStockInformationAsync(string symbol);
     }
 }
